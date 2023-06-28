@@ -75,90 +75,94 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
         }
     }
     return (
-        <div className="date-picker">
-            <header>
-                <h4>{ dayjs(activeDate).format("MMMM YYYY") }</h4>
-                <button
-                    className="btn-month btn-prev"
-                    disabled={isPrevMonthAvailable() ? '' : 'disabled'}
-                    onClick={setPrevMonth}
-                >
-                    <span></span>
-                    { dayjs(activeDate).subtract(1, "month").format("MMM") }
-                </button>
-                <button
-                    className="btn-month btn-next"
-                    onClick={setNextMonth}
-                >
-                    { dayjs(activeDate).add(1, 'month').format("MMM") }
-                    <span></span>
-                </button>
-            </header>
-            <table>
-                <thead className="days-of-week">
-                    <tr>
-                        <th title="Sunday">S</th>
-                        <th title="Monday">M</th>
-                        <th title="Tuesday">T</th>
-                        <th title="Wednesday">W</th>
-                        <th title="Thursday">T</th>
-                        <th title="Friday">F</th>
-                        <th title="Saturday">S</th>
-                    </tr>
-                </thead>
-                <tbody className="date-grid">
-                    {weeks.map((week, weekIndex) => {
-                        return <tr>
-                            {week.map((day, index) => {
-                                return <td
-                                    className="grid-day"
-                                    key={index}
-                                >
-                                    <label className={[
-                                        'grid-btn',
-                                        day.isBooked ? 'booked' : '',
-                                        day.isCurrentMonth ? 'currentMonth' : '',
-                                        isDaySelected(day) ? 'selected' : ''
-                                    ].join(' ').trim()}>
-                                        <time date-time={day.date}>{day.dayOfMonth}</time>
-                                        <span className="icon" aria-hidden="true"></span>
-                                        <input
-                                            type="checkbox"
-                                            disabled={day.isBooked}
-                                            checked={isDaySelected(day) ? 'checked' : null}
-                                            onChange={() => selectDay(day)}
-                                            className="visually-hidden"
-                                            aria-label={`${dayjs(day.date).format('ddd MMM D')} ${day.isBooked ? '(Unavailable)' : ''}`}
-                                        />
-                                    </label>
-                                </td>
-                            })}
+        <form>
+            <div className="date-picker">
+                <header>
+                    <h4>{ dayjs(activeDate).format("MMMM YYYY") }</h4>
+                    <button
+                        className="btn-month btn-prev"
+                        disabled={isPrevMonthAvailable() ? '' : 'disabled'}
+                        onClick={setPrevMonth}
+                    >
+                        <span></span>
+                        { dayjs(activeDate).subtract(1, "month").format("MMM") }
+                    </button>
+                    <button
+                        className="btn-month btn-next"
+                        onClick={setNextMonth}
+                    >
+                        { dayjs(activeDate).add(1, 'month').format("MMM") }
+                        <span></span>
+                    </button>
+                </header>
+                <table>
+                    <thead className="days-of-week">
+                        <tr>
+                            <th title="Sunday">S</th>
+                            <th title="Monday">M</th>
+                            <th title="Tuesday">T</th>
+                            <th title="Wednesday">W</th>
+                            <th title="Thursday">T</th>
+                            <th title="Friday">F</th>
+                            <th title="Saturday">S</th>
                         </tr>
-                    })}
-                </tbody>
-            </table>
-            <div className="date-key">
-                <div className="date-key-item-wrap">
-                    <span className="date-key-item booked">
-                        <span className="icon" aria-hidden="true"></span>
-                    </span>
-                    <span className="date-key-text">Booked</span>
+                    </thead>
+                    <tbody className="date-grid">
+                        {weeks.map((week, weekIndex) => {
+                            return <tr>
+                                {week.map((day, index) => {
+                                    return <td
+                                        className="grid-day"
+                                        key={index}
+                                    >
+                                        <label className={[
+                                            'grid-btn',
+                                            day.isBooked ? 'booked' : '',
+                                            day.isCurrentMonth ? 'currentMonth' : '',
+                                            isDaySelected(day) ? 'selected' : ''
+                                        ].join(' ').trim()}>
+                                            <time date-time={day.date}>{day.dayOfMonth}</time>
+                                            <span className="icon" aria-hidden="true"></span>
+                                            <input
+                                                type="checkbox"
+                                                name="day"
+                                                value={day.date}
+                                                disabled={day.isBooked}
+                                                checked={isDaySelected(day) ? 'checked' : null}
+                                                onChange={() => selectDay(day)}
+                                                className="visually-hidden"
+                                                aria-label={`${dayjs(day.date).format('ddd MMM D')} ${day.isBooked ? '(Unavailable)' : ''}`}
+                                            />
+                                        </label>
+                                    </td>
+                                })}
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
+                <div className="date-key">
+                    <div className="date-key-item-wrap">
+                        <span className="date-key-item booked">
+                            <span className="icon" aria-hidden="true"></span>
+                        </span>
+                        <span className="date-key-text">Booked</span>
+                    </div>
+                    <div className="date-key-item-wrap">
+                        <span className="date-key-item available">
+                            <span className="icon" aria-hidden="true"></span>
+                        </span>
+                        <span className="date-key-text">Available</span>
+                    </div>
+                    <div className="date-key-item-wrap">
+                        <span className="date-key-item selected">
+                            <span className="icon" aria-hidden="true"></span>
+                        </span>
+                        <span className="date-key-text">Selected</span>
+                    </div>
                 </div>
-                <div className="date-key-item-wrap">
-                    <span className="date-key-item available">
-                        <span className="icon" aria-hidden="true"></span>
-                    </span>
-                    <span className="date-key-text">Available</span>
-                </div>
-                <div className="date-key-item-wrap">
-                    <span className="date-key-item selected">
-                        <span className="icon" aria-hidden="true"></span>
-                    </span>
-                    <span className="date-key-text">Selected</span>
-                </div>
+                <button className="reserve-btn">Reserve</button>
             </div>
-            <div className="reserve-btn">Reserve</div>
-        </div>
+        </form>
     )
 }
 

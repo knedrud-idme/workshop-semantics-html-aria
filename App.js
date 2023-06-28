@@ -25,7 +25,7 @@ import imgFooterLogo from "images/icons/footer-logo.svg"
 export function App() {
 	return <>
 		<Header />
-		<div id="main">
+		<main id="main">
 			<Router>
 				<HomePage path="/" />
 				<AboutPage path="/about" />
@@ -44,13 +44,13 @@ export function App() {
 				<Exercise3NamesListingsPage path="/exercise3/listings" />
 				<Exercise4A11yInfoListingPage path="/exercise4/:id" />
 			</Router>
-		</div>
-		<div id="footer">
+		</main>
+		<footer id="footer">
 			<div className="layout">
 				<div id="footer-logo">
 					<img src={imgFooterLogo} alt="CampSpots" />
 				</div>
 			</div>
-		</div>
+		</footer>
 	</>
 }

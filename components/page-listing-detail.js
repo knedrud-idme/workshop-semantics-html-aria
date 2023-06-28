@@ -6,6 +6,7 @@ import LoadedImageUrl from "components/utils/loaded-image-url"
 
 import "components/styles/page-listings.scss"
 
+import HeaderPortal from "components/header-portal"
 import Icon from "components/icon"
 import ListingsData from "data/listings.json"
 import DatePicker from "components/date-picker/date-picker"
@@ -18,36 +19,43 @@ const Listing = props => {
     return (
         <BodyClassName className="header-overlap page-listing-detail">
             <>
-                <div>
-                    <div
+                <HeaderPortal>
+                    <h1 className="visually-hidden">CampSpots: {data.listingName}</h1>
+                </HeaderPortal>
+                <article>
+                    <header
                         className="page-header"
                         style={{backgroundImage: `url(${headerImageUrl}`}}
                     >
                         <div className="page-header-content wide-layout">
-                            <div className="listing-name">{data.listingName}</div>
+                            <h1 className="listing-name">{data.listingName}</h1>
                             <p className="location">{data.location}</p>
                         </div>
-                    </div>
+                    </header>
                     <div className="wide-layout two-parts-70-30">
                         <div>
-                            <div>Description</div>
-                            <div className="description-text" dangerouslySetInnerHTML={{__html: sanitizeHtml(data.description)}} />
-
-                            Amenities
-                            <div className="amenity-icons grid">
-                            {data.amenities.map((amenity, index) => {
-                                return <div key={index}>
-                                    <Icon name={amenity} showText={true} />
+                            <section aria-label="Description">
+                                <h2>Description</h2>
+                                <div className="description-text" dangerouslySetInnerHTML={{__html: sanitizeHtml(data.description)}} />
+                            </section>
+                            <section aria-label="Amenities">
+                                <h2>Amenities</h2>
+                                <div className="amenity-icons grid">
+                                {data.amenities.map((amenity, index) => {
+                                    return <div key={index}>
+                                        <Icon name={amenity} showText={true} />
+                                    </div>
+                                })}
                                 </div>
-                            })}
-                            </div>
+                            </section>
                         </div>
-                        <div>
-                            Calendar
+                        <section aria-label="Booking Calendar">
+                            <h2>Calendar</h2>
                             <DatePicker />
-                        </div>
+                        </section>
                     </div>
-                    <div className="wide-layout">
+                    <section className="wide-layout" aria-label="Photo Gallery">
+                        <h2>Photos</h2>
                         <div className="detail-images">
                             {data.detailImages.map((image, index) => {
                                 let detailImageUrl = LoadedImageUrl(imageURLs, image.imageSrc)
@@ -58,8 +66,8 @@ const Listing = props => {
                                 />
                             })}
                         </div>
-                    </div>
-                </div>
+                    </section>
+                </article>
             </>
         </BodyClassName>
     )

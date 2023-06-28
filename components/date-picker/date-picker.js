@@ -20,12 +20,18 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
     const startMonth = dayjs(activeDate).format("M")
 
     // this collection of dates would come from a database, etc.
-    let initUnavailableDates = ['2022-04-10', '2022-04-11', '2022-04-12', '2022-04-14', '2022-04-15', '2022-04-17', '2022-04-18', '2022-04-19', '2022-04-24', '2022-04-25', '2022-04-27']
+    let initUnavailableDates = ['2023-08-10', '2023-08-11', '2023-08-12', '2022-04-11', '2022-04-12', '2022-04-14', '2022-04-15', '2022-04-17', '2022-04-18', '2022-04-19', '2022-04-24', '2022-04-25', '2022-04-27']
     let activeMonthDays = createActiveMonthDays(startYear, startMonth, initUnavailableDates)
     let prevMonthDays = createPrevMonthDays(startYear, startMonth, activeMonthDays, initUnavailableDates)
     let nextMonthDays = createNextMonthDays(startYear, startMonth, activeMonthDays, initUnavailableDates)
 
     let days = [...prevMonthDays, ...activeMonthDays, ...nextMonthDays]
+    let weeks = [];
+    for (let i = 0; i < days.length; i += 7) {
+        let week = days.slice(i, i + 7);
+        weeks.push(week);
+    }
+
     let [unavailableDates, setUnavailableDates] = useState(initUnavailableDates)
     let [selectedDates, setSelectedDates] = useState([])
 
@@ -71,49 +77,66 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
     return (
         <div className="date-picker">
             <header>
-                <div
+                <h4>{ dayjs(activeDate).format("MMMM YYYY") }</h4>
+                <button
                     className="btn-month btn-prev"
                     disabled={isPrevMonthAvailable() ? '' : 'disabled'}
                     onClick={setPrevMonth}
                 >
                     <span></span>
                     { dayjs(activeDate).subtract(1, "month").format("MMM") }
-                </div>
-                <h4>{ dayjs(activeDate).format("MMMM YYYY") }</h4>
-                <div
+                </button>
+                <button
                     className="btn-month btn-next"
                     onClick={setNextMonth}
                 >
                     { dayjs(activeDate).add(1, 'month').format("MMM") }
                     <span></span>
-                </div>
+                </button>
             </header>
-            <div className="days-of-week">
-                <span title="Sunday">S</span>
-                <span title="Monday">M</span>
-                <span title="Tuesday">T</span>
-                <span title="Wednesday">W</span>
-                <span title="Thursday">T</span>
-                <span title="Friday">F</span>
-                <span title="Saturday">S</span>
-            </div>
-            <div className="date-grid">
-                {days.map((day, index) => {
-                    return <div
-                        className={[
-                            'grid-btn',
-                            day.isBooked ? 'booked' : '',
-                            day.isCurrentMonth ? 'currentMonth' : '',
-                            isDaySelected(day) ? 'selected' : ''
-                        ].join(' ').trim()}
-                        key={index}
-                        onClick={() => selectDay(day)}
-                    >
-                        <time date-time={day.date}>{day.dayOfMonth}</time>
-                        <span className="icon" aria-hidden="true"></span>
-                    </div>
-                })}
-            </div>
+            <table>
+                <thead className="days-of-week">
+                    <tr>
+                        <th title="Sunday">S</th>
+                        <th title="Monday">M</th>
+                        <th title="Tuesday">T</th>
+                        <th title="Wednesday">W</th>
+                        <th title="Thursday">T</th>
+                        <th title="Friday">F</th>
+                        <th title="Saturday">S</th>
+                    </tr>
+                </thead>
+                <tbody className="date-grid">
+                    {weeks.map((week, weekIndex) => {
+                        return <tr>
+                            {week.map((day, index) => {
+                                return <td
+                                    className="grid-day"
+                                    key={index}
+                                >
+                                    <label className={[
+                                        'grid-btn',
+                                        day.isBooked ? 'booked' : '',
+                                        day.isCurrentMonth ? 'currentMonth' : '',
+                                        isDaySelected(day) ? 'selected' : ''
+                                    ].join(' ').trim()}>
+                                        <time date-time={day.date}>{day.dayOfMonth}</time>
+                                        <span className="icon" aria-hidden="true"></span>
+                                        <input
+                                            type="checkbox"
+                                            disabled={day.isBooked}
+                                            checked={isDaySelected(day) ? 'checked' : null}
+                                            onChange={() => selectDay(day)}
+                                            className="visually-hidden"
+                                            aria-label={`${dayjs(day.date).format('ddd MMM D')} ${day.isBooked ? '(Unavailable)' : ''}`}
+                                        />
+                                    </label>
+                                </td>
+                            })}
+                        </tr>
+                    })}
+                </tbody>
+            </table>
             <div className="date-key">
                 <div className="date-key-item-wrap">
                     <span className="date-key-item booked">

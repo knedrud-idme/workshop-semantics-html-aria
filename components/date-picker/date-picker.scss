@@ -51,6 +51,10 @@ div.date-grid {
     gap: 0.25em;
     grid-template-columns: repeat(7, 1fr);
 }
+.date-grid .grid-day {
+    display: table-cell;
+    width: calc(100% / 7);
+}
 .date-grid .grid-btn {
     height: 100%;
     width: 100%;

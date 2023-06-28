@@ -24,6 +24,8 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
     let activeMonthDays = createActiveMonthDays(startYear, startMonth, initUnavailableDates)
     let prevMonthDays = createPrevMonthDays(startYear, startMonth, activeMonthDays, initUnavailableDates)
     let nextMonthDays = createNextMonthDays(startYear, startMonth, activeMonthDays, initUnavailableDates)
+    let prevMonth = dayjs(activeDate).subtract(1, "month")
+    let nextMonth = dayjs(activeDate).add(1, "month")
 
     let days = [...prevMonthDays, ...activeMonthDays, ...nextMonthDays]
     let weeks = [];
@@ -83,15 +85,17 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
                         className="btn-month btn-prev"
                         disabled={isPrevMonthAvailable() ? '' : 'disabled'}
                         onClick={setPrevMonth}
+                        aria-label={`Previous Month: ${prevMonth.format("MMMM")}`}
                     >
                         <span></span>
-                        { dayjs(activeDate).subtract(1, "month").format("MMM") }
+                        {prevMonth.format("MMM")}
                     </button>
                     <button
                         className="btn-month btn-next"
                         onClick={setNextMonth}
+                        aria-label={`Next Month: ${nextMonth.format("MMMM")}`}
                     >
-                        { dayjs(activeDate).add(1, 'month').format("MMM") }
+                        {nextMonth.format("MMM")}
                         <span></span>
                     </button>
                 </header>

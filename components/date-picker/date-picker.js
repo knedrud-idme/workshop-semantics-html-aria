@@ -80,7 +80,7 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
         <form>
             <div className="date-picker">
                 <header>
-                    <h4>{ dayjs(activeDate).format("MMMM YYYY") }</h4>
+                    <h3 id="date-picker-current-month">{ dayjs(activeDate).format("MMMM YYYY") }</h3>
                     <button
                         className="btn-month btn-prev"
                         disabled={isPrevMonthAvailable() ? '' : 'disabled'}
@@ -99,21 +99,21 @@ const DatePicker = ({monthsInAdvance = 2, currDate}) => {
                         <span></span>
                     </button>
                 </header>
-                <table>
+                <table aria-labelledby="date-picker-current-month">
                     <thead className="days-of-week">
                         <tr>
-                            <th title="Sunday">S</th>
-                            <th title="Monday">M</th>
-                            <th title="Tuesday">T</th>
-                            <th title="Wednesday">W</th>
-                            <th title="Thursday">T</th>
-                            <th title="Friday">F</th>
-                            <th title="Saturday">S</th>
+                            <th title="Sunday" scope="col">S</th>
+                            <th title="Monday" scope="col">M</th>
+                            <th title="Tuesday" scope="col">T</th>
+                            <th title="Wednesday" scope="col">W</th>
+                            <th title="Thursday" scope="col">T</th>
+                            <th title="Friday" scope="col">F</th>
+                            <th title="Saturday" scope="col">S</th>
                         </tr>
                     </thead>
                     <tbody className="date-grid">
                         {weeks.map((week, weekIndex) => {
-                            return <tr>
+                            return <tr key={weekIndex}>
                                 {week.map((day, index) => {
                                     return <td
                                         className="grid-day"
